@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model MigrationHistory {
+  MigrationId    String @db.NVarChar(150)
+  ContextKey     String @db.NVarChar(300)
+  Model          Bytes
+  ProductVersion String @db.NVarChar(32)
+
+  @@id([MigrationId, ContextKey], map: "PK_dbo.__MigrationHistory")
+  @@map("__MigrationHistory")
+}
+
+model ComputerEntities {
+  Id                      Int                       @id(map: "PK_dbo.ComputerEntities") @default(autoincrement())
+  Name                    String?                   @db.NVarChar(Max)
+  DateMeasurementEntities DateMeasurementEntities[]
+}
+
+model DateMeasurementEntities {
+  Id                  Int                   @id(map: "PK_dbo.DateMeasurementEntities") @default(autoincrement())
+  ComputerEntityId    Int
+  Date                DateTime              @db.DateTime
+  ComputerEntities    ComputerEntities      @relation(fields: [ComputerEntityId], references: [Id], onUpdate: NoAction, map: "FK_dbo.DateMeasurementEntities_dbo.ComputerEntities_ComputerEntityId")
+  MeasurementEntities MeasurementEntities[]
+
+  @@index([ComputerEntityId], map: "IX_ComputerEntityId")
+}
+
+model HardwareEntities {
+  Id                  Int                   @id(map: "PK_dbo.HardwareEntities") @default(autoincrement())
+  Name                String?               @db.NVarChar(Max)
+  MeasurementEntities MeasurementEntities[]
+}
+
+model MeasurementEntities {
+  Id                      Int                     @id(map: "PK_dbo.MeasurementEntities") @default(autoincrement())
+  DateMeasurementEntityId Int
+  HardwareEntityId        Int
+  SensorName              String?                 @db.NVarChar(Max)
+  MeasuredValue           String?                 @db.NVarChar(Max)
+  Unit                    String?                 @db.NVarChar(Max)
+  DateMeasurementEntities DateMeasurementEntities @relation(fields: [DateMeasurementEntityId], references: [Id], onUpdate: NoAction, map: "FK_dbo.MeasurementEntities_dbo.DateMeasurementEntities_DateMeasurementEntityId")
+  HardwareEntities        HardwareEntities        @relation(fields: [HardwareEntityId], references: [Id], onUpdate: NoAction, map: "FK_dbo.MeasurementEntities_dbo.HardwareEntities_HardwareEntityId")
+
+  @@index([DateMeasurementEntityId], map: "IX_DateMeasurementEntityId")
+  @@index([HardwareEntityId], map: "IX_HardwareEntityId")
+}
