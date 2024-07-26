@@ -11,17 +11,17 @@ interface measurement {
     AverageValueAllTime: number,
 }
 
-export async function GET(request: Request, context: { computer: string, hardware: string, date: string }) {
+export async function GET(request: Request, context: { computerId: string, hardwareId: string, dateId: string }) {
     // @ts-ignore
-    const { computer, hardware, date } = context.params;
+    const { computerId, hardwareId, dateId } = context.params;
 
     const measurementsDb = await prisma.measurementEntities.findMany({
         where: {
             DateMeasurementEntities: {
-                ComputerEntityId: parseInt(computer),
-                Id: parseInt(date)
+                ComputerEntityId: parseInt(computerId),
+                Id: parseInt(dateId)
             },
-            HardwareEntityId: parseInt(hardware),
+            HardwareEntityId: parseInt(hardwareId),
             Unit: {
                 not: ""
             }
@@ -41,9 +41,9 @@ export async function GET(request: Request, context: { computer: string, hardwar
             where: {
                 SensorName: measurement.SensorName,
                 DateMeasurementEntities: {
-                    ComputerEntityId: parseInt(computer)
+                    ComputerEntityId: parseInt(computerId)
                 },
-                HardwareEntityId: parseInt(hardware),
+                HardwareEntityId: parseInt(hardwareId),
                 Unit: {
                     not: ""
                 },
