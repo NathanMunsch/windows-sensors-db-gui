@@ -7,7 +7,7 @@ type DateStore = {
     formatedDateText: string;
     fetchNextDate: () => void;
     fetchPreviousDate: () => void;
-    fetchLatestDateId: () => void;
+    fetchLatestDate: () => void;
 };
 
 export const dateStore = create<DateStore>((set) => ({
@@ -37,10 +37,12 @@ export const dateStore = create<DateStore>((set) => ({
                 console.error('Error fetching previous date:', error);
             });
     },
-    fetchLatestDateId: () => {
+    fetchLatestDate: () => {
         axios.get('/api/date-measurements/latest')
             .then((response) => {
                 set({ dateId: response.data.Id });
+                set({ dateText: response.data.Date });
+                set({ formatedDateText: formateDate(response.data.Date) });
             })
             .catch((error) => {
                 console.error('Error fetching latest date:', error);

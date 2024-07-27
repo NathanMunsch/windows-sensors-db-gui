@@ -10,7 +10,7 @@ export default function Header() {
     const {
         formatedDateText,
         dateId,
-        fetchLatestDateId,
+        fetchLatestDate,
         fetchPreviousDate,
         fetchNextDate
     } = dateStore();
@@ -35,7 +35,7 @@ export default function Header() {
     } = statsStore();
 
     useEffect(() => {
-        fetchLatestDateId();
+        fetchLatestDate();
         fetchComputers();
         fetchHardware();
     }, []);
