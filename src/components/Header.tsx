@@ -35,6 +35,10 @@ export default function Header() {
     } = statsStore();
 
     useEffect(() => {
+        setDateId(dateId);
+    }, [setDateId, dateId]);
+
+    useEffect(() => {
         fetchLatestDate();
         fetchComputers();
         fetchHardware();
@@ -141,10 +145,7 @@ export default function Header() {
             <button
                 type="button"
                 className="ml-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={() => {
-                    setDateId(dateId);
-                    fetchPreviousDate();
-                }}
+                onClick={fetchPreviousDate}
                 disabled={isReloading}
             >
                 <svg
@@ -178,10 +179,7 @@ export default function Header() {
             <button
                 type="button"
                 className="mr-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                onClick={() => {
-                    setDateId(dateId);
-                    fetchNextDate();
-                }}
+                onClick={fetchNextDate}
                 disabled={isReloading}
             >
                 <svg
