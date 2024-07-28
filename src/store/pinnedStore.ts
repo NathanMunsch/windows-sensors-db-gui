@@ -36,9 +36,6 @@ export const usePinnedStore = create<PinnedStore>()(
                     get().addStatPinned(stat);
                 }
             },
-            clearStatPinned: () => {
-                set({statPinned: []});
-            },
             isStatPinned: (stat: string) => {
                 return get().statPinned.includes(stat);
             },
