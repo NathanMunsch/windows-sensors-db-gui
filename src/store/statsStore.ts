@@ -77,8 +77,6 @@ export const statsStore = create<StatsStore>((set) => ({
                     });
                 }, []);
 
-                console.log('Stats:', statsStore.getState().stats);
-
                 set({isReloading: false})
             })
             .catch((error) => {
