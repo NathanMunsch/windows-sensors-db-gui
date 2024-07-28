@@ -11,7 +11,7 @@ type HardwareStore = {
     fetchHardware: () => void;
 };
 
-export const hardwareStore = create<HardwareStore>((set) => ({
+export const useHardwareStore = create<HardwareStore>((set) => ({
     hardware: [
         {
             Id: 0,
@@ -23,10 +23,10 @@ export const hardwareStore = create<HardwareStore>((set) => ({
         axios.get('/api/hardware')
             .then((response) => {
                 // @ts-ignore
-                hardwareStore.getState().hardware.length = 0;
+                useHardwareStore.getState().hardware.length = 0;
 
                 response.data.forEach((hardware: any) => {
-                    hardwareStore.getState().hardware.push({
+                    useHardwareStore.getState().hardware.push({
                         Id: hardware.Id,
                         Name: hardware.Name,
                     });

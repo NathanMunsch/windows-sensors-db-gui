@@ -1,7 +1,7 @@
 'use client';
 
 import Separator from "@/components/Separator";
-import {pinnedStore} from "@/store/pinnedStore";
+import {usePinnedStore} from "@/store/pinnedStore";
 
 type Props = {
     sensorName: string;
@@ -16,7 +16,7 @@ export default function StatCard({ sensorName, value, highestValueAllTime, lowes
 
     const {
         toggleStatPinned
-    } = pinnedStore();
+    } = usePinnedStore();
 
     return (
         <article>

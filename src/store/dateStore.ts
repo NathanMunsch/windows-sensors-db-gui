@@ -10,13 +10,13 @@ type DateStore = {
     fetchLatestDate: () => void;
 };
 
-export const dateStore = create<DateStore>((set) => ({
+export const useDateStore = create<DateStore>((set) => ({
     dateId: 0,
     dateText: '',
     formatedDateText: '',
 
     fetchNextDate: () => {
-        axios.get(`/api/date-measurements/next/${dateStore.getState().dateId}`)
+        axios.get(`/api/date-measurements/next/${useDateStore.getState().dateId}`)
             .then((response) => {
                 set({ dateId: response.data.Id });
                 set({ dateText: response.data.Date });
@@ -27,7 +27,7 @@ export const dateStore = create<DateStore>((set) => ({
             });
     },
     fetchPreviousDate: () => {
-        axios.get(`/api/date-measurements/previous/${dateStore.getState().dateId}`)
+        axios.get(`/api/date-measurements/previous/${useDateStore.getState().dateId}`)
             .then((response) => {
                 set({ dateId: response.data.Id });
                 set({ dateText: response.data.Date });

@@ -1,10 +1,10 @@
 'use client';
 
 import {useEffect} from 'react';
-import {statsStore} from "@/store/statsStore";
-import {dateStore} from "@/store/dateStore";
-import {computerStore} from "@/store/computerStore";
-import {hardwareStore} from "@/store/hardwareStore";
+import {useStatsStore} from "@/store/statsStore";
+import {useDateStore} from "@/store/dateStore";
+import {useComputerStore} from "@/store/computerStore";
+import {useHardwareStore} from "@/store/hardwareStore";
 
 export default function Header() {
     const {
@@ -13,17 +13,17 @@ export default function Header() {
         fetchLatestDate,
         fetchPreviousDate,
         fetchNextDate
-    } = dateStore();
+    } = useDateStore();
 
     const {
         fetchComputers,
         computers
-    } = computerStore();
+    } = useComputerStore();
 
     const {
         fetchHardware,
         hardware
-    } = hardwareStore();
+    } = useHardwareStore();
 
     const {
         setComputerId,
@@ -32,7 +32,7 @@ export default function Header() {
         hardwareId,
         setDateId,
         isReloading,
-    } = statsStore();
+    } = useStatsStore();
 
     useEffect(() => {
         setDateId(dateId);

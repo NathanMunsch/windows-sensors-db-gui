@@ -10,7 +10,7 @@ type PinnedStore = {
     isStatPinned: (stat: string) => boolean;
 };
 
-export const pinnedStore = create<PinnedStore>()(
+export const usePinnedStore = create<PinnedStore>()(
     persist(
         (set, get) => ({
             statPinned: [],

@@ -2,18 +2,18 @@
 
 import Header from "@/components/Header";
 import StatCard from "@/components/StatCard";
-import {statsStore} from "@/store/statsStore";
-import {pinnedStore} from "@/store/pinnedStore";
+import {useStatsStore} from "@/store/statsStore";
+import {usePinnedStore} from "@/store/pinnedStore";
 import Separator from "@/components/Separator";
 
 export default function Home() {
     const {
         stats
-    } = statsStore();
+    } = useStatsStore();
 
     const {
         isStatPinned
-    } = pinnedStore();
+    } = usePinnedStore();
 
     return (
         <main>

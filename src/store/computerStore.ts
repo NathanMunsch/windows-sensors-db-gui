@@ -11,7 +11,7 @@ type ComputerStore = {
     fetchComputers: () => void;
 };
 
-export const computerStore = create<ComputerStore>((set) => ({
+export const useComputerStore = create<ComputerStore>((set) => ({
     computers: [
         {
             Id: 0,
@@ -23,10 +23,10 @@ export const computerStore = create<ComputerStore>((set) => ({
         axios.get('/api/computers')
             .then((response) => {
                 // @ts-ignore
-                computerStore.getState().computers.length = 0;
+                useComputerStore.getState().computers.length = 0;
 
                 response.data.forEach((computer: any) => {
-                    computerStore.getState().computers.push({
+                    useComputerStore.getState().computers.push({
                         Id: computer.Id,
                         Name: computer.Name,
                     });

@@ -26,7 +26,7 @@ type StatsStore = {
     fetchStats: () => void;
 };
 
-export const statsStore = create<StatsStore>((set) => ({
+export const useStatsStore = create<StatsStore>((set) => ({
     computerId: 0,
     hardwareId: 0,
     dateId: 0,
@@ -44,30 +44,30 @@ export const statsStore = create<StatsStore>((set) => ({
 
     setComputerId: (computerId: number) => {
         set({computerId: computerId});
-        statsStore.getState().fetchStats();
+        useStatsStore.getState().fetchStats();
     },
 
     setHardwareId: (hardwareId: number) => {
         set({hardwareId: hardwareId});
         set({isReloading: true});
-        statsStore.getState().fetchStats();
+        useStatsStore.getState().fetchStats();
     },
 
     setDateId: (dateId: number) => {
         set({dateId: dateId});
-        statsStore.getState().fetchStats();
+        useStatsStore.getState().fetchStats();
     },
 
     fetchStats: () => {
         set({isReloading: true});
 
-        axios.get(`/api/stats/${statsStore.getState().computerId}/${statsStore.getState().hardwareId}/${statsStore.getState().dateId}`)
+        axios.get(`/api/stats/${useStatsStore.getState().computerId}/${useStatsStore.getState().hardwareId}/${useStatsStore.getState().dateId}`)
             .then((response) => {
                 // @ts-ignore
-                statsStore.getState().stats.length = 0;
+                useStatsStore.getState().stats.length = 0;
 
                 response.data.forEach((stat: any) => {
-                    statsStore.getState().stats.push({
+                    useStatsStore.getState().stats.push({
                         SensorName: stat.SensorName,
                         MeasuredValue: stat.MeasuredValue,
                         Unit: stat.Unit,
