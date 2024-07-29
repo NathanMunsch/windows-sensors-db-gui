@@ -1,5 +1,15 @@
 import {create} from 'zustand';
-import axios from "axios";
+import {persist} from 'zustand/middleware';
+import axios from 'axios';
+
+type Stat = {
+    SensorName: string;
+    MeasuredValue: number;
+    Unit: string;
+    HighestValueAllTime: number;
+    LowestValueAllTime: number;
+    AverageValueAllTime: number;
+};
 
 type StatsStore = {
     computerId: number;
@@ -13,75 +23,62 @@ type StatsStore = {
 
     isReloading: boolean;
 
-    stats: [
-        {
-            SensorName: string,
-            MeasuredValue: number,
-            Unit: string,
-            HighestValueAllTime: number,
-            LowestValueAllTime: number,
-            AverageValueAllTime: number,
-        }
-    ];
+    stats: Stat[];
     fetchStats: () => void;
 };
 
-export const useStatsStore = create<StatsStore>((set) => ({
-    computerId: 0,
-    hardwareId: 0,
-    dateId: 0,
-    isReloading: false,
-    stats: [
-        {
-            SensorName: '',
-            MeasuredValue: 0,
-            Unit: '',
-            HighestValueAllTime: 0,
-            LowestValueAllTime: 0,
-            AverageValueAllTime: 0,
-        }
-    ],
+export const useStatsStore = create<StatsStore>()(
+    persist(
+        (set, get) => ({
+            computerId: 0,
+            hardwareId: 0,
+            dateId: 0,
+            isReloading: false,
+            stats: [],
 
-    setComputerId: (computerId: number) => {
-        set({computerId: computerId});
-        useStatsStore.getState().fetchStats();
-    },
+            setComputerId: (computerId: number) => {
+                set({ computerId });
+                get().fetchStats();
+            },
 
-    setHardwareId: (hardwareId: number) => {
-        set({hardwareId: hardwareId});
-        set({isReloading: true});
-        useStatsStore.getState().fetchStats();
-    },
+            setHardwareId: (hardwareId: number) => {
+                set({ hardwareId, isReloading: true });
+                get().fetchStats();
+            },
 
-    setDateId: (dateId: number) => {
-        set({dateId: dateId});
-        useStatsStore.getState().fetchStats();
-    },
+            setDateId: (dateId: number) => {
+                set({ dateId });
+                get().fetchStats();
+            },
 
-    fetchStats: () => {
-        set({isReloading: true});
+            fetchStats: () => {
+                set({ isReloading: true });
 
-        axios.get(`/api/stats/${useStatsStore.getState().computerId}/${useStatsStore.getState().hardwareId}/${useStatsStore.getState().dateId}`)
-            .then((response) => {
-                // @ts-ignore
-                useStatsStore.getState().stats.length = 0;
+                const { computerId, hardwareId, dateId } = get();
 
-                response.data.forEach((stat: any) => {
-                    useStatsStore.getState().stats.push({
-                        SensorName: stat.SensorName,
-                        MeasuredValue: stat.MeasuredValue,
-                        Unit: stat.Unit,
-                        HighestValueAllTime: stat.HighestValueAllTime,
-                        LowestValueAllTime: stat.LowestValueAllTime,
-                        AverageValueAllTime: stat.AverageValueAllTime,
+                axios
+                    .get(`/api/stats/${computerId}/${hardwareId}/${dateId}`)
+                    .then((response) => {
+                        const stats = response.data.map((stat: any) => ({
+                            SensorName: stat.SensorName,
+                            MeasuredValue: stat.MeasuredValue,
+                            Unit: stat.Unit,
+                            HighestValueAllTime: stat.HighestValueAllTime,
+                            LowestValueAllTime: stat.LowestValueAllTime,
+                            AverageValueAllTime: stat.AverageValueAllTime,
+                        }));
+
+                        set({ stats, isReloading: false });
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching stats: ', error);
+                        window.alert('Error fetching stats: ' + error);
+                        set({ isReloading: false });
                     });
-                }, []);
-
-                set({isReloading: false})
-            })
-            .catch((error) => {
-                console.error('Error fetching stats: ', error);
-                window.alert('Error fetching stats: ' + error);
-            });
-    }
-}));
+            },
+        }),
+        {
+            name: 'stats-store',
+        }
+    )
+);
