@@ -42,7 +42,7 @@ export default function Header() {
         fetchLatestDate();
         fetchComputers();
         fetchHardware();
-    }, []);
+    }, [fetchComputers, fetchHardware, fetchLatestDate]);
 
     return (
         <header className="flex align-baseline flex-row justify-center gap-3 mt-3 mb-3">
