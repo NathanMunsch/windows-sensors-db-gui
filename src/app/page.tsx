@@ -47,6 +47,7 @@ export default function Home() {
                     )
                 )}
             </section>
+            <br/>
         </main>
     );
 }
