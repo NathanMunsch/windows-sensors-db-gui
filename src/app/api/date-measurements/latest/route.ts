@@ -26,3 +26,6 @@ export async function GET(request: Request) {
         },
     });
 }
+
+// Use `revalidate` to disable caching for this route
+export const revalidate = 0;
