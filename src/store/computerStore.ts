@@ -11,7 +11,7 @@ type ComputerStore = {
     fetchComputers: () => void;
 };
 
-export const useComputerStore = create<ComputerStore>((set) => ({
+export const useComputerStore = create<ComputerStore>(() => ({
     computers: [
         {
             Id: 0,
