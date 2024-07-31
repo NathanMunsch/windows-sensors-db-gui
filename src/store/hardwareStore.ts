@@ -11,7 +11,7 @@ type HardwareStore = {
     fetchHardware: () => void;
 };
 
-export const useHardwareStore = create<HardwareStore>((set) => ({
+export const useHardwareStore = create<HardwareStore>(() => ({
     hardware: [
         {
             Id: 0,

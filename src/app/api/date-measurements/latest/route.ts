@@ -2,7 +2,7 @@ import {PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
+export async function GET() {
     const latestDateMeasurement = await prisma.dateMeasurementEntities.findFirstOrThrow({
         orderBy: {
             Date: 'desc'
@@ -26,3 +26,6 @@ export async function GET(request: Request) {
         },
     });
 }
+
+// Use `revalidate` to disable caching for this route
+export const revalidate = 0;
